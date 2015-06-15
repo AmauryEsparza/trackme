@@ -28,7 +28,16 @@ def get_route(index):
 def get_last_position(index):
 	if request.method == 'GET':
 		json_result = []
-		for result in rutasColl.find({'numero': str(index)}, {'coordenadas':{'$slice': -1}}):
-			json_result.append(result)
-			print(result)
+		for result in db.ruta.find({'numero': str(index)}, {'coordenadas':{'$slice':-1}}):
+			if result["coordenadas"]:
+				print(result["coordenadas"])
+				dbRef = result["coordenadas"].pop()
+				print(dbRef)
+				print(db.dereference(dbRef))
+				json_result.append(db.dereference(dbRef))
 		return Response(dumps(json_result), mimetype='application/json')
+
+#for result in rutasColl.find({'numero': str(index)}, {'coordenadas':{'$slice': -1}}):
+#			json_result.append(result)
+#			print(result)
+#		return Response(dumps(json_result), mimetype='application/json')
